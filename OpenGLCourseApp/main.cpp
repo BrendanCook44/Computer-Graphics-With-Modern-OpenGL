@@ -14,7 +14,7 @@ GLuint VAO, VBO, shader, uniformXMove;
 
 bool direction = true;
 float triOffset = 0.0f;
-float triMaxOffset = 0.8f;
+float triMaxOffset = 0.7f;
 float triIncrement = 0.005f;
 
 // Vertex Shader

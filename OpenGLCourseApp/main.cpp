@@ -12,18 +12,12 @@
 
 #include "Mesh.h"
 #include "Shader.h"
-
-// Window Dimensions
-const GLint WIDTH = 800, HEIGHT = 600;
-
-// Constants
-const float toRadians = 3.14159265359f / 180.0f;
+#include "GLWindow.h"
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
 
-// Function Prototypes
-GLuint VAO, VBO, IBO, shader, uniformModel, uniformProjection;
+GLuint uniformModel, uniformProjection;
 
 bool direction = true;
 float triOffset = 0.0f;
@@ -42,7 +36,6 @@ static const char* vShader = "Shaders/shader.vertex";
 
 void CreateObjects()
 {
-
 	unsigned int indices[] = {
 		0, 3, 1,
 		1, 3, 2,
@@ -76,67 +69,19 @@ void CreateShaders()
 
 int main()
 {
-	// Initialize GLFW
-	if (!glfwInit())
-	{
-		printf("GLFW Initialization failed!");
-		glfwTerminate();
-		return 1;
-	}
-
-	// Setup GLFW Window Properties
-	// OpenGL Version
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-	// Core Profile = No Backwards Compatibility
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-	GLFWwindow* mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window", NULL, NULL);
-	if (!mainWindow)
-	{
-		printf("GLFW window creation failed!");
-		glfwTerminate();
-		return 1;
-	}
-
-	// Get Buffer Size Information
-	int bufferWidth, bufferHeight;
-	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
-
-	// Set Window Context for GLEW
-	glfwMakeContextCurrent(mainWindow);
-
-	// Allow Modern Extension Features
-	glewExperimental = GL_TRUE;
-
-	// Initialize GLEW
-	if (glewInit() != GLEW_OK)
-	{
-		printf("GLEW Initialization failed!");
-		glfwDestroyWindow(mainWindow);
-		glfwTerminate();
-		return 1;
-	}
-
-	// Enable Depth Testing
-	glEnable(GL_DEPTH_TEST);
-
-	// Create Viewport
-	glViewport(0, 0, bufferWidth, bufferHeight);
+	// Create Window
+	GLWindow mainWindow = GLWindow(800, 600);
+	mainWindow.Initialize();
 
 	CreateObjects();
-
-	// Compile Shaders
-	CreateShaders();
-
+	CreateShaders();	
+	
 	// Add Projection Matrix
 	glm::mat4 projection(1.0f);
-	projection = glm::perspective(45.0f, GLfloat(WIDTH) / GLfloat(HEIGHT), 0.1f, 100.0f);
+	projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
 	// Loop Until Window Closed
-	while (!glfwWindowShouldClose(mainWindow))
+	while (!mainWindow.getShouldClose())
 	{
 		// Get + Handle User Input Events
 		glfwPollEvents();
@@ -185,7 +130,6 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Use Shader Program
 		shaderList[0]->UseShader();
 		uniformModel = shaderList[0]->GetModelLocation();
 		uniformProjection = shaderList[0]->GetProjectionLocation();
@@ -209,7 +153,7 @@ int main()
 		glUseProgram(0);
 
 		// Switch Buffers
-		glfwSwapBuffers(mainWindow);
+		mainWindow.swapBuffers();
 	}
 
 	return 0;

@@ -1,0 +1,94 @@
+#include "Mesh.h"
+
+
+Mesh::Mesh()
+{
+    VAO = 0;
+    VBO = 0;
+    IBO = 0;
+    indexCount = 0;
+}
+
+void Mesh::CreateMesh(GLfloat* vertices, unsigned int *indices, unsigned int numOfVertices, unsigned int numOfIndices)
+{
+    indexCount = numOfIndices;
+
+    // Generate and Bind Vertex Array Object (VAO)
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    // Generate and Bind Index Buffer Object (IBO)
+    glGenBuffers(1, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * numOfIndices, indices, GL_STATIC_DRAW);
+
+    // Generate and Bind Vertex Buffer Object (VBO)
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
+
+    // Set Vertex Attributes
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // Enable Vertex Attributes
+    glEnableVertexAttribArray(0);
+
+    // Unbind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Unbind VAO
+    glBindVertexArray(0);
+
+    // Unbind IBO
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Mesh::RenderMesh()
+{
+    // Bind VAO
+    glBindVertexArray(VAO);
+
+    // Bind IBO
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+    // Draw Mesh using IBO
+    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+
+    // Unbind IBO
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    // Unbind VAO
+    glBindVertexArray(0);
+
+}
+
+void Mesh::ClearMesh()
+{
+    // Delete IBO
+    if (IBO != 0)
+    {
+        glDeleteBuffers(1, &IBO);
+        IBO = 0;
+    }
+
+    // Delete VBO
+    if (VBO != 0)
+    {
+        glDeleteBuffers(1, &VBO);
+        VBO = 0;
+    }
+
+    // Delete VAO
+    if (VAO != 0)
+    {
+        glDeleteVertexArrays(1, &VAO);
+        VAO = 0;
+    }
+
+    indexCount = 0;
+}
+
+Mesh::~Mesh()
+{
+    ClearMesh();
+}

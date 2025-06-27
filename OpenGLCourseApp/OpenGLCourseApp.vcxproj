@@ -19,13 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GLWindow.cpp" />
+    <ClCompile Include="Window.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GLWindow.h" />
+    <ClInclude Include="Window.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>

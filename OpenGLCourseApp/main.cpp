@@ -12,7 +12,7 @@
 
 #include "Mesh.h"
 #include "Shader.h"
-#include "GLWindow.h"
+#include "Window.h"
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
@@ -58,7 +58,7 @@ void CreateShaders()
 int main()
 {
 	// Create Window
-	GLWindow mainWindow = GLWindow(800, 600);
+	Window mainWindow = Window(800, 600);
 	mainWindow.Initialize();
 
 	CreateObjects();

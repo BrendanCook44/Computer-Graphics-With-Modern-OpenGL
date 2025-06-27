@@ -24,7 +24,7 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLWindow.cpp">
+    <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLWindow.h">
+    <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

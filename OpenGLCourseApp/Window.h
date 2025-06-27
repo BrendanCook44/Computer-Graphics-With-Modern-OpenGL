@@ -4,12 +4,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-class GLWindow
+class Window
 {
     public:
-        GLWindow();
-        GLWindow(GLint windowWidth, GLint windowHeight);
-        ~GLWindow();
+        Window();
+        Window(GLint windowWidth, GLint windowHeight);
+        ~Window();
 
         int Initialize();
 
@@ -22,5 +22,9 @@ class GLWindow
         GLFWwindow* mainWindow;
         GLint width, height;
         GLint bufferWidth, bufferHeight;
+
+        bool keys[1024];
+
+
 };
 

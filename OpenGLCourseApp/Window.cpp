@@ -53,6 +53,9 @@ int Window::Initialize()
     // Set Context for GLEW to use
     glfwMakeContextCurrent(mainWindow);
 
+    // Handle Key + Mouse Input
+    createCallbacks();
+
     // Allow modern extension features
     glewExperimental = GL_TRUE;
     
@@ -74,9 +77,33 @@ int Window::Initialize()
     return 0;
 }
 
-void handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
+void Window::createCallbacks()
 {
-    Window* mainWindow = static_cast
+    glfwSetKeyCallback(mainWindow, handleKeys);
+}
+
+void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
+{
+    Window* mainWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+        {
+            mainWindow->keys[key] = true;
+            printf("Pressed: %d\n", key);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            mainWindow->keys[key] = false;
+            printf("Released: %d\n", key);
+        }
+    }
 }
 
 Window::~Window()

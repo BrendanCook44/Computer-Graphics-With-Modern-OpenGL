@@ -25,7 +25,14 @@ class Window
 
         bool keys[1024];
 
+        GLfloat lastX;
+        GLfloat lastY;
+        GLfloat xChange;
+        GLfloat yChange;
+        bool mouseFirstMoved;
+
         void createCallbacks();
         static void handleKeys(GLFWwindow* window, int key, int code, int action, int mode);
+        static void handleMouse(GLFWwindow* window, double xPosition, double yPosition);
 };
 

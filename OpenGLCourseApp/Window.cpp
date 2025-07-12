@@ -80,6 +80,7 @@ int Window::Initialize()
 void Window::createCallbacks()
 {
     glfwSetKeyCallback(mainWindow, handleKeys);
+    glfwSetCursorPosCallback(mainWindow, handleMouse);
 }
 
 void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
@@ -96,14 +97,33 @@ void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int m
         if (action == GLFW_PRESS)
         {
             mainWindow->keys[key] = true;
-            printf("Pressed: %d\n", key);
         }
         else if (action == GLFW_RELEASE)
         {
             mainWindow->keys[key] = false;
-            printf("Released: %d\n", key);
         }
     }
+}
+
+void Window::handleMouse(GLFWwindow* window, double xPosition, double yPosition)
+{
+    Window* mainWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+    if (mainWindow->mouseFirstMoved)
+    {
+        mainWindow->lastX = xPosition;
+        mainWindow->lastY = yPosition;
+        mainWindow->mouseFirstMoved = false;
+    }
+
+    mainWindow->xChange = xPosition - mainWindow->lastX;
+    mainWindow->yChange = mainWindow->lastY - yPosition;
+
+    mainWindow->lastX = xPosition;
+    mainWindow->lastY = yPosition;
+
+    printf("x:%.6f, y:%.6f\n", mainWindow->xChange, mainWindow->yChange);
+
 }
 
 Window::~Window()

@@ -18,6 +18,10 @@ class Window
         void swapBuffers() { glfwSwapBuffers(mainWindow); }
         bool getShouldClose() { return glfwWindowShouldClose(mainWindow); }
 
+        bool* getKeys() { return keys; }
+        GLfloat getXChange();
+        GLfloat getYChange();
+
     private:
         GLFWwindow* mainWindow;
         GLint width, height;

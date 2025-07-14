@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
@@ -14,10 +16,14 @@
 #include "Shader.h"
 #include "Window.h"
 #include "Camera.h"
+#include "Texture.h"
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
 Camera camera;
+
+Texture brickTexture("Textures/brick.png");
+Texture dirtTexture("Textures/dirt.png");
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -36,19 +42,20 @@ void CreateObjects()
 		0, 1, 2,
 	};
 
+	// X, Y, Z, U, V
 	GLfloat vertices[] = {
-		-1.0f, -1.0f, 0.0f,
-		0.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 1.0f, 0.5f, 0.0f,
+		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 	};
 
 	Mesh *object1 = new Mesh();
-	object1->CreateMesh(vertices, indices, 12, 12);
+	object1->CreateMesh(vertices, indices, 20, 12);
 	meshList.push_back(object1);
 
 	Mesh *object2 = new Mesh();
-	object2->CreateMesh(vertices, indices, 12, 12);
+	object2->CreateMesh(vertices, indices, 20, 12);
 	meshList.push_back(object2);
 }
 
@@ -71,6 +78,10 @@ int main()
 
 	//Initialize Camera
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 1.0f);
+
+	//Load Textures
+	brickTexture.LoadTexture();
+	dirtTexture.LoadTexture();
 	
 	// Add Projection Matrix
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
@@ -108,12 +119,18 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+
+		brickTexture.UseTexture();
+
 		meshList[0]->RenderMesh();
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		dirtTexture.UseTexture();
+
 		meshList[1]->RenderMesh();
 
 		// Unbind Shader Program

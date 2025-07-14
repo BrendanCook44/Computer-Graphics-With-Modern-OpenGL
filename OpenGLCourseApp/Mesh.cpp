@@ -27,11 +27,11 @@ void Mesh::CreateMesh(GLfloat* vertices, unsigned int *indices, unsigned int num
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
 
-    // Set Vertex Attributes
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-    // Enable Vertex Attributes
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5, 0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5, (void*)(sizeof(vertices[0]) * 3));
+    glEnableVertexAttribArray(1);
 
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);

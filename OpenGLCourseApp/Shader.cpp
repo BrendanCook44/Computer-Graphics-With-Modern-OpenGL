@@ -6,6 +6,8 @@ Shader::Shader()
     uniformModel = 0;
     uniformProjection = 0;
 	uniformView = 0;
+	uniformAmbientColor = 0;
+	uniformAmbientIntensity = 0;
 }
 
 std::string Shader::ReadFile(const char* fileLocation)
@@ -36,6 +38,8 @@ void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
     uniformModel = 0;
     uniformProjection = 0;
 	uniformView = 0;
+	uniformAmbientColor = 0;
+	uniformAmbientIntensity = 0;
 
     CompileShader(vertexCode, fragmentCode);
 
@@ -116,6 +120,8 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 	uniformModel = glGetUniformLocation(shaderID, "model");
 	uniformProjection = glGetUniformLocation(shaderID, "projection");
 	uniformView = glGetUniformLocation(shaderID, "view");
+	uniformAmbientColor = glGetUniformLocation(shaderID, "directionalLight.color");
+	uniformAmbientIntensity = glGetUniformLocation(shaderID, "directionalLight.ambientIntensity");
 }
 
 GLuint Shader::GetModelLocation()
@@ -131,6 +137,16 @@ GLuint Shader::GetProjectionLocation()
 GLuint Shader::GetViewLocation()
 {
 	return uniformView;
+}
+
+GLuint Shader::GetAmbientColorLocation()
+{
+	return uniformAmbientColor;
+}
+
+GLuint Shader::GetAmbientIntensityLocation()
+{
+	return uniformAmbientIntensity;
 }
 
 void Shader::UseShader()
@@ -149,6 +165,9 @@ void Shader::ClearShader()
     uniformModel = 0;
     uniformProjection = 0;
 	uniformView = 0;
+	uniformAmbientColor = 0;
+	uniformAmbientIntensity = 0;
+
 }
 
 Shader::~Shader()

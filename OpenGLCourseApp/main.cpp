@@ -17,6 +17,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "Light.h"
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
@@ -24,6 +25,8 @@ Camera camera;
 
 Texture brickTexture("Textures/brick.png");
 Texture dirtTexture("Textures/dirt.png");
+
+Light mainLight;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -82,9 +85,11 @@ int main()
 	//Load Textures
 	brickTexture.LoadTexture();
 	dirtTexture.LoadTexture();
+
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f);
 	
 	// Add Projection Matrix
-	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
+	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformAmbientColor = 0, uniformAmbientIntensity = 0;
 	glm::mat4 projection(1.0f);
 	projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
@@ -110,6 +115,10 @@ int main()
 		uniformModel = shaderList[0]->GetModelLocation();
 		uniformProjection = shaderList[0]->GetProjectionLocation();
 		uniformView = shaderList[0]->GetViewLocation();
+		uniformAmbientColor = shaderList[0]->GetAmbientColorLocation();
+		uniformAmbientIntensity = shaderList[0]->GetAmbientIntensityLocation();
+
+		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor);
 
 		// Create Model Matrix
 		glm::mat4 model(1.0f);

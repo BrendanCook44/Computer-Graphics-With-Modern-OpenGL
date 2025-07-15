@@ -86,7 +86,7 @@ int main()
 	brickTexture.LoadTexture();
 	dirtTexture.LoadTexture();
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	// Add Projection Matrix
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformAmbientColor = 0, uniformAmbientIntensity = 0;

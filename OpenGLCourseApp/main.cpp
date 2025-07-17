@@ -36,6 +36,48 @@ GLuint uniformModel, uniformProjection, uniformView;
 static const char* fShader = "Shaders/shader.fragment";
 static const char* vShader = "Shaders/shader.vertex";
 
+void calculateAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, 
+							 unsigned int vLength, unsigned int normalOffset)
+{
+	for (size_t i = 0; i < indiceCount; i += 3)
+	{
+		unsigned int indice0 = indices[i] * vLength;
+		unsigned int indice1 = indices[i + 1] * vLength;
+		unsigned int indice2 = indices[i + 2] * vLength;
+		glm::vec3 v1(vertices[indice1] - vertices[indice0], vertices[indice1 + 1] - vertices[indice0 + 1], vertices[indice1 + 2] - vertices[indice0 + 2]);
+		glm::vec3 v2(vertices[indice2] - vertices[indice0], vertices[indice2 + 1] - vertices[indice0 + 1], vertices[indice2 + 2] - vertices[indice0 + 2]);
+		glm::vec3 normal = glm::cross(v1, v2);
+		normal = glm::normalize(normal);
+
+		indice0 += normalOffset;
+		indice1 += normalOffset;
+		indice2 += normalOffset;
+
+		vertices[indice0] += normal.x;
+		vertices[indice0 + 1] += normal.y;
+		vertices[indice0 + 2] += normal.z;
+
+		vertices[indice1] += normal.x;
+		vertices[indice1 + 1] += normal.y;
+		vertices[indice1 + 2] += normal.z;
+
+		vertices[indice2] += normal.x;
+		vertices[indice2 + 1] += normal.y;
+		vertices[indice2 + 2] += normal.z;
+	}
+
+	for (size_t i = 0; i < verticeCount / vLength; i += 3)
+	{
+		unsigned int nOffset = i * vLength + normalOffset;
+		glm::vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
+		vec = glm::normalize(vec);
+
+		vertices[nOffset] = vec.x;
+		vertices[nOffset + 1] = vec.y;
+		vertices[nOffset + 2] = vec.z;
+	}
+}
+
 void CreateObjects()
 {
 	unsigned int indices[] = {
@@ -45,20 +87,22 @@ void CreateObjects()
 		0, 1, 2,
 	};
 
-	// X, Y, Z, U, V
+	//	  X		 Y	   Z		 U	   V		 NX    NY    NZ
 	GLfloat vertices[] = {
-		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 1.0f, 0.5f, 0.0f,
-		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		-1.0f, -1.0f, 0.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 1.0f,		0.5f, 0.0f,		0.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,		0.5f, 1.0f,		0.0f, 0.0f, 0.0f
 	};
 
+	calculateAverageNormals(indices, 12, vertices, 32, 8, 5);
+
 	Mesh *object1 = new Mesh();
-	object1->CreateMesh(vertices, indices, 20, 12);
+	object1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(object1);
 
 	Mesh *object2 = new Mesh();
-	object2->CreateMesh(vertices, indices, 20, 12);
+	object2->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(object2);
 }
 
@@ -86,10 +130,11 @@ int main()
 	brickTexture.LoadTexture();
 	dirtTexture.LoadTexture();
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 
+					  2.0f, -1.0f, -2.0f, 1.0f);
 	
 	// Add Projection Matrix
-	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformAmbientColor = 0, uniformAmbientIntensity = 0;
+	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformAmbientColor = 0, uniformAmbientIntensity = 0, uniformDirection = 0, uniformDiffuseIntensity = 0;
 	glm::mat4 projection(1.0f);
 	projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
@@ -117,8 +162,10 @@ int main()
 		uniformView = shaderList[0]->GetViewLocation();
 		uniformAmbientColor = shaderList[0]->GetAmbientColorLocation();
 		uniformAmbientIntensity = shaderList[0]->GetAmbientIntensityLocation();
+		uniformDirection = shaderList[0]->GetUniformDirection();
+		uniformDiffuseIntensity = shaderList[0]->GetDiffuseIntensityLocation();
 
-		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor);
+		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffuseIntensity, uniformDirection);
 
 		// Create Model Matrix
 		glm::mat4 model(1.0f);

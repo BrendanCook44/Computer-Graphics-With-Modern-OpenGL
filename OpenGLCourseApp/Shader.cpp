@@ -10,6 +10,9 @@ Shader::Shader()
 	uniformAmbientIntensity = 0;
 	uniformDiffuseIntensity = 0;
 	uniformDirection = 0;
+	uniformSpecularIntensity = 0;
+	uniformShininess = 0;
+	uniformCameraPosition = 0;
 }
 
 std::string Shader::ReadFile(const char* fileLocation)
@@ -44,6 +47,9 @@ void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
 	uniformAmbientIntensity = 0;
 	uniformDiffuseIntensity = 0;
 	uniformDirection = 0;
+	uniformSpecularIntensity = 0;
+	uniformShininess = 0;
+	uniformCameraPosition = 0;
 
     CompileShader(vertexCode, fragmentCode);
 
@@ -128,6 +134,9 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 	uniformAmbientIntensity = glGetUniformLocation(shaderID, "directionalLight.ambientIntensity");
 	uniformDirection = glGetUniformLocation(shaderID, "directionalLight.direction");
 	uniformDiffuseIntensity = glGetUniformLocation(shaderID, "directionalLight.diffuseIntensity");
+	uniformSpecularIntensity = glGetUniformLocation(shaderID, "material.specularIntensity");
+	uniformShininess = glGetUniformLocation(shaderID, "material.shininess");
+	uniformCameraPosition = glGetUniformLocation(shaderID, "cameraPosition");
 }
 
 GLuint Shader::GetModelLocation()
@@ -165,6 +174,21 @@ GLuint Shader::GetUniformDirection()
 	return uniformDirection;
 }
 
+GLuint Shader::GetSpecularIntensityLocation()
+{
+	return uniformSpecularIntensity;
+}
+
+GLuint Shader::GetShininessLocation()
+{
+	return uniformShininess;
+}
+
+GLuint Shader::GetCameraPositionLocation()
+{
+	return uniformCameraPosition;
+}
+
 void Shader::UseShader()
 {
     glUseProgram(shaderID);
@@ -185,6 +209,9 @@ void Shader::ClearShader()
 	uniformAmbientIntensity = 0;
 	uniformDiffuseIntensity = 0;
 	uniformDirection = 0;
+	uniformSpecularIntensity = 0;
+	uniformShininess = 0;
+	uniformCameraPosition = 0;
 
 }
 

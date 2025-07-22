@@ -17,7 +17,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Texture.h"
-#include "Light.h"
+#include "DirectionalLight.h"
 #include "Material.h"
 
 std::vector<Mesh*> meshList;
@@ -30,7 +30,7 @@ Texture dirtTexture("Textures/dirt.png");
 Material shinyMaterial;
 Material dullMaterial;
 
-Light mainLight;
+DirectionalLight mainLight;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -137,8 +137,9 @@ int main()
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 
-					  2.0f, -1.0f, -2.0f, 0.3f);
+	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
+								 0.1f, 0.3f, 
+								 0.0f, 0.0f, -1.0f);
 	
 	// Add Uniforms
 	GLuint uniformProjection = 0;

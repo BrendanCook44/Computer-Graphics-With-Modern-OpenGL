@@ -142,12 +142,30 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 
 	uniformPointLightCount = glGetUniformLocation(shaderID, "pointLightCount");
 
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
 		char locationBuffer[100] = { '\0' };
 
-		snprintf(locationBuffer, sizeof(locationBuffer), "pointsLights[%d].base.color", i);
-		uniformPointLight[3];
+		snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].base.color", i);
+		uniformPointLight[i].uniformColor = glGetUniformLocation(shaderID, locationBuffer);
+
+		snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].base.ambientIntensity", i);
+		uniformPointLight[i].uniformAmbientIntensity = glGetUniformLocation(shaderID, locationBuffer);
+
+		snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].base.diffuseIntensity", i);
+		uniformPointLight[i].uniformDiffuseIntensity = glGetUniformLocation(shaderID, locationBuffer);
+
+		snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].position", i);
+		uniformPointLight[i].uniformPosition = glGetUniformLocation(shaderID, locationBuffer);
+
+		snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].constant", i);
+		uniformPointLight[i].uniformConstant = glGetUniformLocation(shaderID, locationBuffer);
+
+		snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].linear", i);
+		uniformPointLight[i].uniformLinear = glGetUniformLocation(shaderID, locationBuffer);
+
+		snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].exponent", i);
+		uniformPointLight[i].uniformExponent = glGetUniformLocation(shaderID, locationBuffer);
 	}
 
 }
@@ -205,6 +223,23 @@ GLuint Shader::GetCameraPositionLocation()
 void Shader::SetDirectionalLight(DirectionalLight* dLight)
 {
 	dLight->UseLight(uniformDirectionalLight.uniformAmbientIntensity, uniformDirectionalLight.uniformColor, uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformDirection);
+}
+
+void Shader::SetPointLights(PointLight* pLight, unsigned int lightCount)
+{
+	if (lightCount > MAX_POINT_LIGHTS)
+	{
+		lightCount = MAX_POINT_LIGHTS;
+	}
+
+	glUniform1i(uniformPointLightCount, lightCount);
+	
+	for (size_t i = 0; i < lightCount; i++)
+	{
+		pLight[i].UseLight(uniformPointLight[i].uniformAmbientIntensity, uniformPointLight[i].uniformColor,
+			uniformPointLight[i].uniformDiffuseIntensity, uniformPointLight[i].uniformPosition,
+			uniformPointLight[i].uniformConstant, uniformPointLight[i].uniformLinear, uniformPointLight[i].uniformExponent);
+	}
 }
 
 void Shader::UseShader()

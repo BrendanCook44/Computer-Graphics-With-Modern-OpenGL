@@ -50,6 +50,8 @@ class Shader
         GLuint uniformShininess;
         GLuint uniformCameraPosition;
 
+        GLuint uniformPointLightCount;
+
         struct {
             GLuint uniformColor;
             GLuint uniformAmbientIntensity;
@@ -57,6 +59,17 @@ class Shader
 
             GLuint uniformDirection;
         } uniformDirectionalLight;
+
+        struct {
+            GLuint uniformColor;
+            GLuint uniformAmbientIntensity;
+            GLuint uniformDiffuseIntensity;
+
+            GLuint uniformPosition;
+            GLuint uniformConstant;
+            GLuint uniformLinear;
+            GLuint uniformExponent;
+        } uniformPointLight[3];
 
         void AddShader(GLuint program, const char* shaderCode, GLenum shaderType);
         void CompileShader(const char* vertexCode, const char* fragmentCode);

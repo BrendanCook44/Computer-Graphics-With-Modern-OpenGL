@@ -115,10 +115,10 @@ vec4 CalculatePointLights()
 
 vec4 CalculateSpotLight(SpotLight sLight)
 {
-	vec3 rayDirection = normalize(FragmentPosition - sLight.base.position)
+	vec3 rayDirection = normalize(FragmentPosition - sLight.base.position);
 	float slFactor = dot(rayDirection, sLight.direction);
 
-	if(slFactor > spotLight.edge)
+	if(slFactor > sLight.edge)
 	{
 		vec4 color = CalculatePointLight(sLight.base);
 
@@ -137,6 +137,8 @@ vec4 CalculateSpotLights()
 	{
 		totalColor += CalculateSpotLight(spotLights[i]);
 	}
+
+	return totalColor;
 }
 
 void main()

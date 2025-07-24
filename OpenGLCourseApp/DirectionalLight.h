@@ -13,8 +13,6 @@ public:
 
 	void UseLight(GLuint ambientIntensityLocation, GLuint ambientColorLocation, GLuint diffuseIntensityLocation, GLuint directionLocation);
 
-	~DirectionalLight();
-
 private:
 	glm::vec3 direction;
 };

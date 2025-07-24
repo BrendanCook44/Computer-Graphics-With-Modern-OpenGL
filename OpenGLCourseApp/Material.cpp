@@ -17,9 +17,3 @@ void Material::UseMaterial(GLuint specularIntensityLocation, GLuint shininessLoc
 	glUniform1f(specularIntensityLocation, specularIntensity);
 	glUniform1f(shininessLocation, shininess);
 }
-
-
-Material::~Material()
-{
-
-}

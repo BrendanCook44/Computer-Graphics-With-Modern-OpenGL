@@ -20,8 +20,3 @@ void DirectionalLight::UseLight(GLuint ambientIntensityLocation, GLuint ambientC
 	glUniform3f(directionLocation, direction.x, direction.y, direction.z);
 	glUniform1f(diffuseIntensityLocation, diffuseIntensity);
 }
-
-DirectionalLight::~DirectionalLight()
-{
-
-}

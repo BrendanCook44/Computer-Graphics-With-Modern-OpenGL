@@ -13,8 +13,3 @@ Light::Light(GLfloat red, GLfloat green, GLfloat blue, GLfloat aIntensity, GLflo
 	ambientIntensity = aIntensity;
 	diffuseIntensity = dIntensity;
 }
-
-Light::~Light()
-{
-
-}

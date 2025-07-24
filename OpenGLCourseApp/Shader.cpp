@@ -15,6 +15,7 @@ Shader::Shader()
 	uniformCameraPosition = 0;
 
 	pointLightCount = 0;
+	spotLightCount = 0;
 }
 
 std::string Shader::ReadFile(const char* fileLocation)
@@ -52,6 +53,9 @@ void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
 	uniformSpecularIntensity = 0;
 	uniformShininess = 0;
 	uniformCameraPosition = 0;
+
+	pointLightCount = 0;
+	spotLightCount = 0;
 
 	CompileShader(vertexCode, fragmentCode);
 

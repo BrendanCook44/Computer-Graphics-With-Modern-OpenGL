@@ -2,9 +2,9 @@
 
 Shader::Shader()
 {
-    shaderID = 0;
-    uniformModel = 0;
-    uniformProjection = 0;
+	shaderID = 0;
+	uniformModel = 0;
+	uniformProjection = 0;
 	uniformView = 0;
 	uniformDirectionalLight.uniformColor = 0;
 	uniformDirectionalLight.uniformAmbientIntensity = 0;
@@ -19,31 +19,31 @@ Shader::Shader()
 
 std::string Shader::ReadFile(const char* fileLocation)
 {
-    std::string content;
-    std::ifstream fileStream(fileLocation, std::ios::in);
+	std::string content;
+	std::ifstream fileStream(fileLocation, std::ios::in);
 
-    if (!fileStream.is_open())
-    {
-        printf("Failed to read %s! File doesn't exist.\n", fileLocation);
-        return "";
-    }
+	if (!fileStream.is_open())
+	{
+		printf("Failed to read %s! File doesn't exist.\n", fileLocation);
+		return "";
+	}
 
-    std::string line = "";
-    while (!fileStream.eof())
-    {
-        std::getline(fileStream, line);
-        content.append(line + "\n");
-    }
+	std::string line = "";
+	while (!fileStream.eof())
+	{
+		std::getline(fileStream, line);
+		content.append(line + "\n");
+	}
 
-    fileStream.close();
-    return content;
+	fileStream.close();
+	return content;
 }
 
 void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
 {
-    shaderID = 0;
-    uniformModel = 0;
-    uniformProjection = 0;
+	shaderID = 0;
+	uniformModel = 0;
+	uniformProjection = 0;
 	uniformView = 0;
 	uniformDirectionalLight.uniformColor = 0;
 	uniformDirectionalLight.uniformAmbientIntensity = 0;
@@ -53,23 +53,23 @@ void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
 	uniformShininess = 0;
 	uniformCameraPosition = 0;
 
-    CompileShader(vertexCode, fragmentCode);
+	CompileShader(vertexCode, fragmentCode);
 
 }
 
 void Shader::CreateFromFiles(const char* vertexLocation, const char* fragmentLocation)
 {
-    std::string vertexString = ReadFile(vertexLocation);
-    std::string fragmentString = ReadFile(fragmentLocation);
-    const char* vertexCode = vertexString.c_str();
-    const char* fragmentCode = fragmentString.c_str();
+	std::string vertexString = ReadFile(vertexLocation);
+	std::string fragmentString = ReadFile(fragmentLocation);
+	const char* vertexCode = vertexString.c_str();
+	const char* fragmentCode = fragmentString.c_str();
 
-    CompileShader(vertexCode, fragmentCode);
+	CompileShader(vertexCode, fragmentCode);
 }
 
 void Shader::AddShader(GLuint program, const char* shaderCode, GLenum shaderType)
 {
-    GLuint shaderObject = glCreateShader(shaderType);
+	GLuint shaderObject = glCreateShader(shaderType);
 
 	const GLchar* code[1];
 	code[0] = shaderCode;
@@ -96,7 +96,7 @@ void Shader::AddShader(GLuint program, const char* shaderCode, GLenum shaderType
 
 void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 {
-    shaderID = glCreateProgram();
+	shaderID = glCreateProgram();
 
 	if (!shaderID)
 	{
@@ -172,12 +172,12 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 
 GLuint Shader::GetModelLocation()
 {
-    return uniformModel;
+	return uniformModel;
 }
 
 GLuint Shader::GetProjectionLocation()
 {
-    return uniformProjection;
+	return uniformProjection;
 }
 
 GLuint Shader::GetViewLocation()
@@ -233,7 +233,7 @@ void Shader::SetPointLights(PointLight* pLight, unsigned int lightCount)
 	}
 
 	glUniform1i(uniformPointLightCount, lightCount);
-	
+
 	for (size_t i = 0; i < lightCount; i++)
 	{
 		pLight[i].UseLight(uniformPointLight[i].uniformAmbientIntensity, uniformPointLight[i].uniformColor,
@@ -244,19 +244,19 @@ void Shader::SetPointLights(PointLight* pLight, unsigned int lightCount)
 
 void Shader::UseShader()
 {
-    glUseProgram(shaderID);
+	glUseProgram(shaderID);
 }
 
 void Shader::ClearShader()
 {
-    if (shaderID != 0)
-    {
-        glDeleteProgram(shaderID);
-        shaderID = 0;
-    }
+	if (shaderID != 0)
+	{
+		glDeleteProgram(shaderID);
+		shaderID = 0;
+	}
 
-    uniformModel = 0;
-    uniformProjection = 0;
+	uniformModel = 0;
+	uniformProjection = 0;
 	uniformView = 0;
 	uniformDirectionalLight.uniformColor = 0;
 	uniformDirectionalLight.uniformAmbientIntensity = 0;
@@ -270,5 +270,5 @@ void Shader::ClearShader()
 
 Shader::~Shader()
 {
-    ClearShader();
+	ClearShader();
 }

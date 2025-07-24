@@ -1,8 +1,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 
+#include <cmath>
 #include <stdio.h>
 #include <string.h>
-#include <cmath>
 #include <vector>
 
 #include <GL/glew.h>
@@ -12,14 +12,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Mesh.h"
-#include "Shader.h"
-#include "Window.h"
 #include "Camera.h"
-#include "Texture.h"
 #include "DirectionalLight.h"
-#include "PointLight.h"
 #include "Material.h"
+#include "Mesh.h"
+#include "PointLight.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "Window.h"
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
@@ -42,8 +42,8 @@ GLuint uniformModel, uniformProjection, uniformView;
 static const char* fShader = "Shaders/shader.fragment";
 static const char* vShader = "Shaders/shader.vertex";
 
-void calculateAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, 
-							 unsigned int vLength, unsigned int normalOffset)
+void calculateAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
+	unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)
 	{
@@ -115,22 +115,22 @@ void CreateObjects()
 
 	calculateAverageNormals(indices, 12, vertices, 32, 8, 5);
 
-	Mesh *object1 = new Mesh();
+	Mesh* object1 = new Mesh();
 	object1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(object1);
 
-	Mesh *object2 = new Mesh();
+	Mesh* object2 = new Mesh();
 	object2->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(object2);
 
-	Mesh *object3 = new Mesh();
+	Mesh* object3 = new Mesh();
 	object3->CreateMesh(floorVertices, floorIndices, 32, 6);
 	meshList.push_back(object3);
 }
 
 void CreateShaders()
 {
-	Shader *shader1 = new Shader();
+	Shader* shader1 = new Shader();
 	shader1->CreateFromFiles(vShader, fShader);
 	shaderList.push_back(shader1);
 }
@@ -155,26 +155,26 @@ int main()
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
 
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
-								 0.1f, 0.3f, 
-								 0.0f, 0.0f, -1.0f);
+	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.1f, 0.3f,
+		0.0f, 0.0f, -1.0f);
 
 	unsigned int pointLightCount = 0;
 
 	pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
-								0.1f, 1.0f,
-								4.0f, 0.0f, 0.0f,
-								0.3f, 0.2f, 0.1f);
+		0.1f, 1.0f,
+		4.0f, 0.0f, 0.0f,
+		0.3f, 0.2f, 0.1f);
 
 	pointLightCount++;
 
 	pointLights[1] = PointLight(0.0f, 1.0f, 0.0f,
-								0.1f, 1.0f,
-								-4.0f, 2.0f, 0.0f,
-								0.3f, 0.2f, 0.1f);
+		0.1f, 1.0f,
+		-4.0f, 2.0f, 0.0f,
+		0.3f, 0.2f, 0.1f);
 
 	pointLightCount++;
-	
+
 	// Add Uniforms
 	GLuint uniformProjection = 0;
 	GLuint uniformModel = 0;

@@ -3,98 +3,98 @@
 
 Mesh::Mesh()
 {
-    VAO = 0;
-    VBO = 0;
-    IBO = 0;
-    indexCount = 0;
+	VAO = 0;
+	VBO = 0;
+	IBO = 0;
+	indexCount = 0;
 }
 
-void Mesh::CreateMesh(GLfloat* vertices, unsigned int *indices, unsigned int numOfVertices, unsigned int numOfIndices)
+void Mesh::CreateMesh(GLfloat* vertices, unsigned int* indices, unsigned int numOfVertices, unsigned int numOfIndices)
 {
-    indexCount = numOfIndices;
+	indexCount = numOfIndices;
 
-    // Generate and Bind Vertex Array Object (VAO)
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+	// Generate and Bind Vertex Array Object (VAO)
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
-    // Generate and Bind Index Buffer Object (IBO)
-    glGenBuffers(1, &IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * numOfIndices, indices, GL_STATIC_DRAW);
+	// Generate and Bind Index Buffer Object (IBO)
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * numOfIndices, indices, GL_STATIC_DRAW);
 
-    // Generate and Bind Vertex Buffer Object (VBO)
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
+	// Generate and Bind Vertex Buffer Object (VBO)
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
 
-    // X, Y, Z
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, 0);
-    glEnableVertexAttribArray(0);
+	// X, Y, Z
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, 0);
+	glEnableVertexAttribArray(0);
 
-    // U, V
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void*)(sizeof(vertices[0]) * 3));
-    glEnableVertexAttribArray(1);
+	// U, V
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void*)(sizeof(vertices[0]) * 3));
+	glEnableVertexAttribArray(1);
 
-    // Normals - NX, NY, NZ
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void*)(sizeof(vertices[0]) * 5));
-    glEnableVertexAttribArray(2);
+	// Normals - NX, NY, NZ
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void*)(sizeof(vertices[0]) * 5));
+	glEnableVertexAttribArray(2);
 
-    // Unbind VBO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+	// Unbind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // Unbind VAO
-    glBindVertexArray(0);
+	// Unbind VAO
+	glBindVertexArray(0);
 
-    // Unbind IBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	// Unbind IBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void Mesh::RenderMesh()
 {
-    // Bind VAO
-    glBindVertexArray(VAO);
+	// Bind VAO
+	glBindVertexArray(VAO);
 
-    // Bind IBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	// Bind IBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-    // Draw Mesh using IBO
-    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+	// Draw Mesh using IBO
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 
-    // Unbind IBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	// Unbind IBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    // Unbind VAO
-    glBindVertexArray(0);
+	// Unbind VAO
+	glBindVertexArray(0);
 
 }
 
 void Mesh::ClearMesh()
 {
-    // Delete IBO
-    if (IBO != 0)
-    {
-        glDeleteBuffers(1, &IBO);
-        IBO = 0;
-    }
+	// Delete IBO
+	if (IBO != 0)
+	{
+		glDeleteBuffers(1, &IBO);
+		IBO = 0;
+	}
 
-    // Delete VBO
-    if (VBO != 0)
-    {
-        glDeleteBuffers(1, &VBO);
-        VBO = 0;
-    }
+	// Delete VBO
+	if (VBO != 0)
+	{
+		glDeleteBuffers(1, &VBO);
+		VBO = 0;
+	}
 
-    // Delete VAO
-    if (VAO != 0)
-    {
-        glDeleteVertexArrays(1, &VAO);
-        VAO = 0;
-    }
+	// Delete VAO
+	if (VAO != 0)
+	{
+		glDeleteVertexArrays(1, &VAO);
+		VAO = 0;
+	}
 
-    indexCount = 0;
+	indexCount = 0;
 }
 
 Mesh::~Mesh()
 {
-    ClearMesh();
+	ClearMesh();
 }

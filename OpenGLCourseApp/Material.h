@@ -4,16 +4,16 @@
 
 class Material
 {
-	public:
-		Material();
-		Material(GLfloat sIntensity, GLfloat shine);
+public:
+	Material();
+	Material(GLfloat sIntensity, GLfloat shine);
 
-		void UseMaterial(GLuint specularIntensityLocation, GLuint shininessLocation);
+	void UseMaterial(GLuint specularIntensityLocation, GLuint shininessLocation);
 
-		~Material();
+	~Material();
 
-	private:
-		GLfloat specularIntensity;
-		GLfloat shininess;
+private:
+	GLfloat specularIntensity;
+	GLfloat shininess;
 };
 

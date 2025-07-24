@@ -19,7 +19,7 @@ Texture::Texture(const char* fileLocation)
 
 }
 
-void Texture::LoadTexture() 
+void Texture::LoadTexture()
 {
 	unsigned char* textureData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
 

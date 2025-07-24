@@ -18,6 +18,7 @@
 #include "Mesh.h"
 #include "PointLight.h"
 #include "Shader.h"
+#include "SpotLight.h"
 #include "Texture.h"
 #include "Window.h"
 

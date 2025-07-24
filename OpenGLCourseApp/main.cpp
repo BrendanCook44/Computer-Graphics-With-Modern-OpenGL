@@ -145,9 +145,16 @@ int main()
 
 	unsigned int pointLightCount = 0;
 
-	pointLights[0] = PointLight(0.0f, 1.0f, 0.0f,
+	pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
+								0.1f, 0.4f,
+								4.0f, 0.0f, 0.0f,
+								0.3f, 0.2f, 0.1f);
+
+	pointLightCount++;
+
+	pointLights[1] = PointLight(0.0f, 1.0f, 0.0f,
 								0.1f, 1.0f,
-								-4.0f, 0.0f, 0.0f,
+								-4.0f, 2.0f, 0.0f,
 								0.3f, 0.2f, 0.1f);
 
 	pointLightCount++;

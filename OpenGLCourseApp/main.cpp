@@ -179,7 +179,7 @@ int main()
 
 	pointLightCount++;
 
-	spotLights[0] = SpotLight(0.0f, 0.0f, 1.0f,
+	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
 							 0.0f, 1.0f,
 						     0.0f, 0.0f, 0.0f,
 							 0.0f, -1.0f, 0.0f,
@@ -224,6 +224,8 @@ int main()
 		uniformCameraPosition = shaderList[0]->GetCameraPositionLocation();
 		uniformSpecularIntensity = shaderList[0]->GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0]->GetShininessLocation();
+
+		spotLights[0].SetFlash(camera.getCameraPosition(), camera.GetCameraDirection());
 
 		shaderList[0]->SetDirectionalLight(&mainLight);
 		shaderList[0]->SetPointLights(pointLights, pointLightCount);

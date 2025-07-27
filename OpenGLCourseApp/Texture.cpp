@@ -53,6 +53,8 @@ void Texture::LoadTexture()
 	stbi_image_free(textureData);
 }
 
+void LoadTextureWithAlpha();
+
 void Texture::UseTexture()
 {
 	glActiveTexture(GL_TEXTURE0);

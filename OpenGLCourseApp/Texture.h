@@ -9,6 +9,7 @@ public:
 	Texture(const char* fileLocation);
 
 	void LoadTexture();
+
 	void UseTexture();
 	void ClearTexture();
 

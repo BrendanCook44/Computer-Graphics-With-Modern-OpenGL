@@ -21,8 +21,7 @@
 #include "SpotLight.h"
 #include "Texture.h"
 #include "Window.h"
-
-#include <assimp/Importer.hpp>
+#include "Model.h"
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
@@ -34,6 +33,9 @@ Texture plainTexture("Textures/plain.png");
 
 Material shinyMaterial;
 Material dullMaterial;
+
+Model xwing;
+Model blackhawk;
 
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
@@ -167,6 +169,9 @@ int main()
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
 
+	xwing = Model();
+	xwing.LoadModel("Models/x-wing.obj");
+
 	// Initialize Lights & Count Variables
 	unsigned int pointLightCount = 0;
 	unsigned int spotLightCount = 0;
@@ -257,11 +262,14 @@ int main()
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
+		// Pyramid 1
 		brickTexture.UseTexture();
 		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
 		meshList[0]->RenderMesh();
 
+
+		// Pyramid 2
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 4.0f, -2.5f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -272,6 +280,7 @@ int main()
 
 		meshList[1]->RenderMesh();
 
+		// Floor
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, -0.0f));
 		// model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -280,6 +289,17 @@ int main()
 		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
 		meshList[2]->RenderMesh();
+
+		// X-Wing Model
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(0.006f, 0.006f, 0.006f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		dirtTexture.UseTexture();
+		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		xwing.RenderModel();
 
 		// Unbind Shader Program
 		glUseProgram(0);

@@ -22,12 +22,15 @@
 #include "Texture.h"
 #include "Window.h"
 
+#include <assimp/Importer.hpp>
+
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
 Camera camera;
 
 Texture brickTexture("Textures/brick.png");
 Texture dirtTexture("Textures/dirt.png");
+Texture plainTexture("Textures/plain.png");
 
 Material shinyMaterial;
 Material dullMaterial;
@@ -153,6 +156,7 @@ int main()
 	//Load Textures
 	brickTexture.LoadTexture();
 	dirtTexture.LoadTexture();
+	plainTexture.LoadTexture();
 
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
@@ -198,6 +202,9 @@ int main()
 
 	glm::mat4 projection(1.0f);
 	projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
+
+	Assimp::Importer importer;
+
 
 	// Loop Until Window Closed
 	while (!mainWindow.getShouldClose())

@@ -172,12 +172,15 @@ int main()
 	xwing = Model();
 	xwing.LoadModel("Models/x-wing.obj");
 
+	blackhawk = Model();
+	blackhawk.LoadModel("Models/uh60.obj");
+
 	// Initialize Lights & Count Variables
 	unsigned int pointLightCount = 0;
 	unsigned int spotLightCount = 0;
 
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-								0.1f, 0.3f,
+								0.3f, 0.6f,
 								0.0f, 0.0f, -1.0f);
 
 	pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
@@ -256,13 +259,12 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// Create Model Matrix
+		// Pyramid 1
 		glm::mat4 model(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		// Pyramid 1
 		brickTexture.UseTexture();
 		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
@@ -292,14 +294,23 @@ int main()
 
 		// X-Wing Model
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 10.0f));
+		model = glm::translate(model, glm::vec3(-6.0f, 0.0f, 10.0f));
 		model = glm::scale(model, glm::vec3(0.006f, 0.006f, 0.006f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		dirtTexture.UseTexture();
 		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
 		xwing.RenderModel();
+
+		// Blackhawk Model
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-2.0f, 0.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.050f, 0.050f, 0.050f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		blackhawk.RenderModel();
 
 		// Unbind Shader Program
 		glUseProgram(0);

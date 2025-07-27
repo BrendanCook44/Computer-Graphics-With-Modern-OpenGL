@@ -154,9 +154,15 @@ int main()
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 1.0f);
 
 	//Load Textures
-	brickTexture.LoadTexture();
-	dirtTexture.LoadTexture();
-	plainTexture.LoadTexture();
+	if (!brickTexture.LoadTexture()) {
+		printf("Failed to load brick texture!\n");
+	}
+	if (!dirtTexture.LoadTexture()) {
+		printf("Failed to load dirt texture!\n");
+	}
+	if (!plainTexture.LoadTexture()) {
+		printf("Failed to load plain texture!\n");
+	}
 
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);

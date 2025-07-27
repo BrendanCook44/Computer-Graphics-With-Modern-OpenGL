@@ -19,14 +19,14 @@ Texture::Texture(const char* fileLocation)
 
 }
 
-void Texture::LoadTexture()
+bool Texture::LoadTexture()
 {
 	unsigned char* textureData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
 
 	if (!textureData)
 	{
 		printf("Failed to find: %s\n", fileLocation);
-		return;
+		return false;
 	}
 
 	glGenTextures(1, &textureID);
@@ -51,6 +51,8 @@ void Texture::LoadTexture()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	stbi_image_free(textureData);
+	
+	return true;
 }
 
 void LoadTextureWithAlpha();

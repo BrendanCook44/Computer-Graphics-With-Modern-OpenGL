@@ -4,6 +4,7 @@ in vec4 vCol;
 in vec2 textureCoordinate;
 in vec3 Normal;
 in vec3 FragmentPosition;
+in vec4 DirectionalLightSpacePosition;
 
 out vec4 color;
 
@@ -53,11 +54,25 @@ uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 uniform sampler2D theTexture;
+uniform sampler2D directionalShadowMap;
 uniform Material material;
 
 uniform vec3 cameraPosition;
 
-vec4 CalculateLightByDirection(Light light, vec3 direction)
+float CalculateDirectionalShadowFactor(DirectionalLight light)
+{
+	vec3 projectionCoordinates = DirectionalLightSpacePosition.xyz / DirectionalLightSpacePosition.w;
+	projectionCoordinates = (projectionCoordinates * 0.5) + 0.5;
+
+	float closest = texture(directionalShadowMap, projectionCoordinates.xy).r;
+	float current = projectionCoordinates.z;
+
+	float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+
+	return shadow;
+}
+
+vec4 CalculateLightByDirection(Light light, vec3 direction, float shadowFactor)
 {
 	vec4 ambientColor = vec4(light.color, 1.0f) * light.ambientIntensity;
 
@@ -80,12 +95,13 @@ vec4 CalculateLightByDirection(Light light, vec3 direction)
 		}
 	}
 
-	return (ambientColor + diffuseColor + specularColor);
+	return (ambientColor + (1.0 - shadowFactor) * (diffuseColor + specularColor));
 }
 
 vec4 CalculateDirectionalLight()
 {
-	return CalculateLightByDirection(directionalLight.base, directionalLight.direction);
+	float shadowFactor = CalculateDirectionalShadowFactor(directionalLight);
+	return CalculateLightByDirection(directionalLight.base, directionalLight.direction, shadowFactor);
 }
 
 vec4 CalculatePointLight(PointLight pLight)
@@ -94,7 +110,7 @@ vec4 CalculatePointLight(PointLight pLight)
 		float distance = length(direction);
 		direction = normalize(direction);
 
-		vec4 color = CalculateLightByDirection(pLight.base, direction);
+		vec4 color = CalculateLightByDirection(pLight.base, direction, 0.0f);
 		float attenuation = pLight.exponent * distance * distance +
 							pLight.linear * distance +
 							pLight.constant;

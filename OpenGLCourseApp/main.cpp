@@ -39,6 +39,8 @@ Material dullMaterial;
 Model xwing;
 Model blackhawk;
 
+GLfloat blackhawkAngle = 0.0f;
+
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -200,10 +202,18 @@ void RenderScene()
 	xwing.RenderModel();
 
 	// Blackhawk Model
+	blackhawkAngle += 0.1f;
+
+	if (blackhawkAngle > 360.0f)
+	{
+		blackhawkAngle = 0.1f;
+	}
+
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(-2.0f, 0.5f, 0.0f));
+	model = glm::rotate(model, glm::radians(-blackhawkAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::translate(model, glm::vec3(-8.0f, 2.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(-20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(-180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -301,7 +311,7 @@ int main()
 	blackhawk.LoadModel("Models/uh60.obj");
 
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-								0.3f, 0.6f,
+								0.3f, 0.3f,
 								0.0f, -20.0f, -15.0f,
 								2048, 2048);
 

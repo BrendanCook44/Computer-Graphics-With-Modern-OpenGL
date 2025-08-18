@@ -26,6 +26,8 @@ public:
 	void CreateFromFiles(const char* vertexLocation, const char* fragmentLocation);
 	void CreateFromFiles(const char* vertexLocation, const char* geometryLocation, const char* fragmentLocation);
 
+	void Validate();
+
 	GLuint GetModelLocation();
 	GLuint GetProjectionLocation();
 	GLuint GetViewLocation();
@@ -41,8 +43,8 @@ public:
 
 
 	void SetDirectionalLight(DirectionalLight* dLight);
-	void SetPointLights(PointLight* pLight, unsigned int lightCount);
-	void SetSpotLights(SpotLight* sLight, unsigned int lightCount);
+	void SetPointLights(PointLight* pLight, unsigned int lightCount, unsigned int textureUnit, unsigned int offset);
+	void SetSpotLights(SpotLight* sLight, unsigned int lightCount, unsigned int textureUnit, unsigned int offset);
 	void SetTexture(GLuint textureUnit);
 	void SetDirectionalShadowMap(GLuint textureUnit);
 	void SetDirectionalLightTransform(glm::mat4* directionalLightTransform);
@@ -96,6 +98,11 @@ private:
 		GLuint uniformLinear;
 		GLuint uniformExponent;
 	} uniformPointLight[MAX_POINT_LIGHTS];
+
+	struct {
+		GLuint shadowMap;
+		GLuint farPlane;
+	} uniformOmniShadowMap[MAX_POINT_LIGHTS + MAX_SPOT_LIGHTS];
 
 	struct {
 		GLuint uniformColor;

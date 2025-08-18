@@ -1,6 +1,9 @@
 #include "OmniShadowMap.h"
 
-OmniShadowMap::OmniShadowMap() : ShadowMap() {}
+OmniShadowMap::OmniShadowMap() : ShadowMap()
+{
+
+}
 
 bool OmniShadowMap::Init(GLuint width, GLuint height)
 {
@@ -49,9 +52,4 @@ void OmniShadowMap::Read(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, shadowMap);
-}
-
-OmniShadowMap::~OmniShadowMap()
-{
-
 }

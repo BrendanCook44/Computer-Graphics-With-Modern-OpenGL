@@ -26,6 +26,7 @@
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
 Shader directionalShadowShader;
+Shader omniShadowShader;
 
 Camera camera;
 
@@ -58,6 +59,8 @@ GLuint uniformView = 0;
 GLuint uniformCameraPosition = 0;
 GLuint uniformSpecularIntensity = 0;
 GLuint uniformShininess = 0;
+GLuint uniformOmniLightPosition = 0;
+GLuint uniformFarPlane = 0;
 
 static const char* fShader = "Shaders/shader.fragment";
 static const char* vShader = "Shaders/shader.vertex";
@@ -156,6 +159,9 @@ void CreateShaders()
 
 	directionalShadowShader = Shader();
 	directionalShadowShader.CreateFromFiles("Shaders/directional_shadow_map.vertex", "Shaders/directional_shadow_map.fragment");
+
+	omniShadowShader = Shader();
+	omniShadowShader.CreateFromFiles("Shaders/omni_shadow_map.vertex", "Shaders/omni_shadow_map.geometry", "Shaders/omni_shadow_map.fragment");
 }
 
 void RenderScene()
@@ -278,6 +284,28 @@ void DirectionalShadowMapPass(DirectionalLight* light)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void OmniShadowMapPass(PointLight* light)
+{
+	omniShadowShader.UseShader();
+
+	glViewport(0, 0, light->GetShadowMap()->GetShadowWidth(), light->GetShadowMap()->GetShadowHeight());
+
+	light->GetShadowMap()->Write();
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	uniformModel = omniShadowShader.GetModelLocation();
+	uniformOmniLightPosition = omniShadowShader.GetOmniLightPositionLocation();
+	uniformFarPlane = omniShadowShader.GetFarPlaneLocation();
+
+	glUniform3f(uniformOmniLightPosition, light->GetPosition().x, light->GetPosition().y, light->GetPosition().z);
+	glUniform1f(uniformFarPlane, light->GetFarPlane());
+	omniShadowShader.SetLightMatrices(light->CalculateLightTransform());
+
+	RenderScene();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 int main()
 {
 	// Create Window
@@ -318,14 +346,18 @@ int main()
 	pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
 								0.1f, 0.1f,
 								4.0f, 0.0f, 0.0f,
-								0.3f, 0.2f, 0.1f);
+								0.3f, 0.2f, 0.1f,
+								1024, 1024,
+								0.01f, 100.0f);
 
 	pointLightCount++;
 
 	pointLights[1] = PointLight(0.0f, 1.0f, 0.0f,
 								0.1f, 0.1f,
 								-4.0f, 2.0f, 0.0f,
-								0.3f, 0.2f, 0.1f);
+								0.3f, 0.2f, 0.1f,
+								1024, 1024,
+								0.01f, 100.0f);
 
 	pointLightCount++;
 
@@ -334,12 +366,14 @@ int main()
 						     0.0f, 0.0f, 0.0f,
 							 0.0f, -1.0f, 0.0f,
 							 0.3f, 0.2f, 0.1f,
-							 20.0f);
+							 20.0f,
+							 1024, 1024,
+							 0.01f, 100.0f);
 
 	spotLightCount++;
 
 	glm::mat4 projection(1.0f);
-	projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(60.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
 	Assimp::Importer importer;
 
@@ -359,6 +393,17 @@ int main()
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
 		DirectionalShadowMapPass(&mainLight);
+		
+		for (size_t i = 0; i < pointLightCount; i++)
+		{
+			OmniShadowMapPass(&pointLights[i]);
+		}
+
+		for (size_t i = 0; i < spotLightCount; i++)
+		{
+			OmniShadowMapPass(&spotLights[i]);
+		}
+
 		RenderPass(projection, camera.calculateViewMatrix());
 
 		// Unbind Shader Program

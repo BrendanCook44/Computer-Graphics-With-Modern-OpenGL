@@ -4,11 +4,15 @@ class OmniShadowMap : public ShadowMap
 {
 
 public:
-	bool Init(GLuint width, GLuint height);
+	OmniShadowMap();
+	
+	bool Init(GLuint width, GLuint height) override;
 
-	void Write();
+	void Write() override;
 
-	void Read(GLenum textureUnit);
+	void Read(GLenum textureUnit) override;
+
+	~OmniShadowMap();
 
 
 private:

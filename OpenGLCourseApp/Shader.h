@@ -24,6 +24,8 @@ public:
 	std::string ReadFile(const char* fileLocation);
 	void CreateFromString(const char* vertexCode, const char* fragmentCode);
 	void CreateFromFiles(const char* vertexLocation, const char* fragmentLocation);
+	void CreateFromFiles(const char* vertexLocation, const char* geometryLocation, const char* fragmentLocation);
+
 	GLuint GetModelLocation();
 	GLuint GetProjectionLocation();
 	GLuint GetViewLocation();
@@ -34,6 +36,9 @@ public:
 	GLuint GetSpecularIntensityLocation();
 	GLuint GetShininessLocation();
 	GLuint GetCameraPositionLocation();
+	GLuint GetOmniLightPositionLocation();
+	GLuint GetFarPlaneLocation();
+
 
 	void SetDirectionalLight(DirectionalLight* dLight);
 	void SetPointLights(PointLight* pLight, unsigned int lightCount);
@@ -41,6 +46,7 @@ public:
 	void SetTexture(GLuint textureUnit);
 	void SetDirectionalShadowMap(GLuint textureUnit);
 	void SetDirectionalLightTransform(glm::mat4* directionalLightTransform);
+	void SetLightMatrices(std::vector<glm::mat4> lightMatrices);
 
 	void UseShader();
 	void ClearShader();
@@ -51,6 +57,8 @@ private:
 
 	int pointLightCount;
 	int spotLightCount;
+	GLuint uniformPointLightCount;
+	GLuint uniformSpotLightCount;
 
 	GLuint shaderID;
 	GLuint uniformModel;
@@ -65,8 +73,10 @@ private:
 
 	GLuint uniformDirectionalLightTransform;
 	GLuint uniformDirectionalShadowMap;
+	GLuint uniformOmniLightPosition;
+	GLuint uniformFarPlane;
 
-	GLuint uniformPointLightCount;
+	GLuint uniformLightMatrices[6];
 
 	struct {
 		GLuint uniformColor;
@@ -87,8 +97,6 @@ private:
 		GLuint uniformExponent;
 	} uniformPointLight[MAX_POINT_LIGHTS];
 
-	GLuint uniformSpotLightCount;
-
 	struct {
 		GLuint uniformColor;
 		GLuint uniformAmbientIntensity;
@@ -105,6 +113,9 @@ private:
 
 	void AddShader(GLuint program, const char* shaderCode, GLenum shaderType);
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
+	void CompileShader(const char* vertexCode, const char* geometryCode, const char* fragmentCode);
+
+	void CompileProgram();
 
 };
 

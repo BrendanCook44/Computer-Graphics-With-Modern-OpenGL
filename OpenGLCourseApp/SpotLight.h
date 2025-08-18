@@ -12,7 +12,9 @@ public:
 		GLfloat xPos, GLfloat yPos, GLfloat zPos,
 		GLfloat xDir, GLfloat yDir, GLfloat zDir,
 		GLfloat con, GLfloat lin, GLfloat exp,
-		GLfloat edge);
+		GLfloat edge,
+		GLuint shadowWidth, GLuint shadowHeight,
+		GLfloat near, GLfloat far);
 
 	void UseLight(GLuint ambientIntensityLocation, GLuint ambientColorLocation,
 		GLuint diffuseIntensityLocation, GLuint positionLocation, GLuint directionLocation,

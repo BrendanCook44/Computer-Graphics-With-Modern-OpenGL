@@ -21,6 +21,8 @@ public:
 		GLuint constantLocation, GLuint linearLocation, GLuint exponentLocation,
 		GLuint edgeLocation);
 
+	void Toggle() { isOn = !isOn; }
+
 	void SetFlash(glm::vec3 pos, glm::vec3 dir);
 
 private:
@@ -28,5 +30,7 @@ private:
 
 	GLfloat edge;
 	GLfloat processEdge;
+
+	bool isOn;
 };
 

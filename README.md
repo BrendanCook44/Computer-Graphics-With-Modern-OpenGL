@@ -21,6 +21,15 @@ The course covers modern OpenGL practices including rendering pipelines, shaders
 - Create and Use Shadow Maps  
 - Implement a Skybox  
 
+## Prerequisites
+
+- **Microsoft Visual Studio**  
+- **MSVC Compiler**  
+
+(All external libraries and textures are already included in the repository.)  
+
+---
+
 ## How to Use
 
 Clone the repository:

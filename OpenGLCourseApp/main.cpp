@@ -359,9 +359,9 @@ int main()
 
 	skybox = Skybox(skyboxFaces);
 
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-								0.3f, 0.3f,
-								0.0f, -20.0f, -15.0f,
+	mainLight = DirectionalLight(1.0f, 0.53f, 0.3f,
+								0.1f, 0.9f,
+								-10.0f, -12.0f, 18.5f,
 								2048, 2048);
 
 	pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,

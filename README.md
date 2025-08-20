@@ -36,3 +36,6 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/BrendanCook44/Computer-Graphics-With-Modern-OpenGL
+```
+
+Open OpenGLCourseApp.sln, then compile and run the program.

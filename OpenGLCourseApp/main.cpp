@@ -22,6 +22,7 @@
 #include "Texture.h"
 #include "Window.h"
 #include "Model.h"
+#include "Skybox.h"
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
@@ -39,8 +40,9 @@ Material dullMaterial;
 
 Model xwing;
 Model blackhawk;
-
 GLfloat blackhawkAngle = 0.0f;
+
+Skybox skybox;
 
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
@@ -230,6 +232,15 @@ void RenderScene()
 
 void RenderPass(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
+
+	glViewport(0, 0, 1920, 1080);
+
+	// Clear Window
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	skybox.DrawSkybox(viewMatrix, projectionMatrix);
+
 	shaderList[0]->UseShader();
 	uniformModel = shaderList[0]->GetModelLocation();
 	uniformProjection = shaderList[0]->GetProjectionLocation();
@@ -237,12 +248,6 @@ void RenderPass(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 	uniformCameraPosition = shaderList[0]->GetCameraPositionLocation();
 	uniformSpecularIntensity = shaderList[0]->GetSpecularIntensityLocation();
 	uniformShininess = shaderList[0]->GetShininessLocation();
-
-	glViewport(0, 0, 1920, 1080);
-
-	// Clear Window
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 	glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(viewMatrix));
@@ -343,6 +348,16 @@ int main()
 
 	blackhawk = Model();
 	blackhawk.LoadModel("Models/uh60.obj");
+
+	std::vector<std::string> skyboxFaces;
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+
+	skybox = Skybox(skyboxFaces);
 
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 								0.3f, 0.3f,

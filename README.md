@@ -39,4 +39,4 @@ git clone https://github.com/BrendanCook44/Computer-Graphics-With-Modern-OpenGL
 ```
 
 2. Open OpenGLCourseApp.sln
-3. Compile and run the progrma
+3. Compile and run the program

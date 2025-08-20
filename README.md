@@ -4,8 +4,6 @@ This repository contains all projects & assignments associated with the completi
 
 The course covers modern OpenGL practices including rendering pipelines, shaders, transformations, lighting, texture mapping, camera control, and more using C++ and OpenGL.
 
----
-
 ## Projects
 
 - Create and Manipulate Windows  
@@ -22,8 +20,6 @@ The course covers modern OpenGL practices including rendering pipelines, shaders
 - Import Models  
 - Create and Use Shadow Maps  
 - Implement a Skybox  
-
----
 
 ## How to Use
 
